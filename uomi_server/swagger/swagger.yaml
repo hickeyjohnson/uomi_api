@@ -9,8 +9,8 @@ info:
   license:
     name: "MIT License"
     url: "https://opensource.org/licenses/MIT"
-host: "virtserver.swaggerhub.com"
-basePath: "/matthickey709/uomi_api/1.0.0"
+host: "localhost"
+basePath: "/uomi_api"
 tags:
 - name: "users"
   description: "User/Login Information and user net balance"
