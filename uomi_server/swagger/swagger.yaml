@@ -1,0 +1,267 @@
+---
+swagger: "2.0"
+info:
+  description: "This API is to manage connections between clients and the UOMI backend."
+  version: "1.0.0"
+  title: "UOMI API"
+  contact:
+    email: "mjh060@mun.ca"
+  license:
+    name: "MIT License"
+    url: "https://opensource.org/licenses/MIT"
+host: "virtserver.swaggerhub.com"
+basePath: "/matthickey709/uomi_api/1.0.0"
+tags:
+- name: "users"
+  description: "User/Login Information and user net balance"
+- name: "accounts"
+  description: "Operations involving creation/deletion of accounts between users"
+- name: "transactions"
+  description: "Operations involving transactions between users"
+schemes:
+- "https"
+paths:
+  /users:
+    get:
+      tags:
+      - "users"
+      summary: "get all registered users"
+      description: ""
+      operationId: "query_all_users"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "successful operation"
+      x-swagger-router-controller: "uomi_server.controllers.users_controller"
+    post:
+      tags:
+      - "users"
+      summary: "adds a new user"
+      description: "Adds login information for a new user"
+      operationId: "create_user"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "User object that must be added to the database"
+        required: true
+        schema:
+          type: "object"
+      responses:
+        201:
+          description: "user created"
+        400:
+          description: "invalid input, object invalid"
+        409:
+          description: "user already exists with info"
+      x-swagger-router-controller: "uomi_server.controllers.users_controller"
+  /users/{user_id}:
+    get:
+      tags:
+      - "users"
+      summary: "get all user info for the specified user"
+      description: ""
+      operationId: "get_user_info"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "user_id"
+        in: "path"
+        description: "unique user_id"
+        required: true
+        type: "integer"
+        format: "int32"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "object"
+        400:
+          description: "invalid user ID supplied"
+        404:
+          description: "user not found"
+      x-swagger-router-controller: "uomi_server.controllers.users_controller"
+    delete:
+      tags:
+      - "users"
+      summary: "delete a user from the app"
+      description: ""
+      operationId: "delete_user"
+      parameters:
+      - name: "user_id"
+        in: "path"
+        description: "unique user_id"
+        required: true
+        type: "integer"
+        format: "int32"
+      responses:
+        202:
+          description: "successful deletion"
+        404:
+          description: "user not found"
+      x-swagger-router-controller: "uomi_server.controllers.users_controller"
+  /accounts/{user_id}:
+    get:
+      tags:
+      - "accounts"
+      summary: "Get all accounts associated with a given user"
+      description: ""
+      operationId: "user_all_accounts"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "user_id"
+        in: "path"
+        description: "unique user_id"
+        required: true
+        type: "integer"
+        format: "int32"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "object"
+        400:
+          description: "invalid user ID supplied"
+        404:
+          description: "user not found"
+      x-swagger-router-controller: "uomi_server.controllers.accounts_controller"
+  /accounts:
+    post:
+      tags:
+      - "accounts"
+      summary: "add a new account including users involved"
+      description: ""
+      operationId: "open_new_account"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: "object"
+      responses:
+        201:
+          description: "successful account creation"
+        400:
+          description: "account with ID already exists"
+      x-swagger-router-controller: "uomi_server.controllers.accounts_controller"
+  /accounts/remove/{account_id}:
+    delete:
+      tags:
+      - "accounts"
+      summary: "deletes an account given the account id"
+      description: ""
+      operationId: "remove_account"
+      parameters:
+      - name: "account_id"
+        in: "path"
+        description: "unique account identifier"
+        required: true
+        type: "integer"
+        format: "int32"
+      responses:
+        202:
+          description: "successful deletion"
+        404:
+          description: "cannot find account to delete"
+      x-swagger-router-controller: "uomi_server.controllers.accounts_controller"
+  /netBalance/{user_id}:
+    get:
+      tags:
+      - "users"
+      summary: "retrieve net balance for a user"
+      description: ""
+      operationId: "user_net_balance"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "user_id"
+        in: "path"
+        description: "unique user identifier"
+        required: true
+        type: "integer"
+        format: "int32"
+      responses:
+        200:
+          description: "successful operation"
+      x-swagger-router-controller: "uomi_server.controllers.users_controller"
+  /transactions/{account_id}:
+    get:
+      tags:
+      - "transactions"
+      summary: "get all transactions within an account"
+      description: ""
+      operationId: "find_all_transactions"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "account_id"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int32"
+      responses:
+        200:
+          description: "successful operation"
+        404:
+          description: "account not found"
+      x-swagger-router-controller: "uomi_server.controllers.transactions_controller"
+    post:
+      tags:
+      - "transactions"
+      summary: "add transaction to an account"
+      description: ""
+      operationId: "add_transaction"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "account_id"
+        in: "path"
+        description: "account unique identifier"
+        required: true
+        type: "integer"
+        format: "int32"
+      - in: "body"
+        name: "body"
+        description: "info about the transaction to be added"
+        required: true
+        schema:
+          type: "object"
+      responses:
+        201:
+          description: "successful creation"
+        404:
+          description: "account id not found"
+      x-swagger-router-controller: "uomi_server.controllers.transactions_controller"
+  /transactions/remove/{transaction_id}:
+    delete:
+      tags:
+      - "transactions"
+      summary: "removes a transaction from an account"
+      description: ""
+      operationId: "delete_transaction"
+      parameters:
+      - name: "transaction_id"
+        in: "path"
+        description: "transaction item unique identifier"
+        required: true
+        type: "integer"
+        format: "int32"
+      responses:
+        202:
+          description: "successful deletion"
+        404:
+          description: "transaction not found"
+      x-swagger-router-controller: "uomi_server.controllers.transactions_controller"
+definitions: {}
