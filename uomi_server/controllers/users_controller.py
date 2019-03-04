@@ -10,7 +10,7 @@ def create_user(body):  # noqa: E501
     Adds login information for a new user # noqa: E501
 
     :param body: User object that must be added to the database
-    :type body: 
+    :type body:
 
     :rtype: None
     """
