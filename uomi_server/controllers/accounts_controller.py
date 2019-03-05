@@ -47,17 +47,13 @@ def user_all_accounts(user_id):  # noqa: E501
 
     :rtype: object
     """
-    custom_q = text(
-        "SELECT account_id, account_users, last_updated FROM accounts WHERE :x = ANY(account_users::int[])"
+
+    # Custom filter for getting all accounts where user is a part of
+    filter_user = text(
+        ":x = ANY(account_users::int[])"
     )
-    # FIXME: make it map to Account ORM automatically!
-    params = {'x': user_id}
     db_conn_mgmt.connect_to_db()
-    q = db_conn_mgmt.db_session.execute(clause=custom_q, mapper=Account(), params=params).fetchall()
-    result = []
+    # Query on accounts using custom filter where the param is user_id
+    q = db_conn_mgmt.db_session.query(Account).filter(filter_user).params(x=user_id).all()
     db_conn_mgmt.disconnect_db()
-    for row in q:
-        result.append({'account_id': row[0],
-                    'account_users' : row[1],
-                    'last_updated': row[2]})
-    return jsonify(result)
+    return jsonify([account.dump() for account in q])
