@@ -1,5 +1,5 @@
 from sqlalchemy import create_engine, Column, Numeric, DateTime, String, Sequence, Integer  # noqa
-from sqlalchemy.dialects.postgresql import MONEY
+from sqlalchemy.dialects import postgresql
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -23,10 +23,15 @@ class User(Base):
     def dump(self):
         return dict([(key, val) for key, val in self.__dict__.items() if key[0] != '_'])
 
-# class Account(Base):
-#     __tablename__ = 'accounts'
-#     pass
-#
+class Account(Base):
+    __tablename__ = 'accounts'
+    account_id = Column(Integer(), Sequence('accounts_id_seq'), primary_key=True)
+    last_updated = Column(DateTime())
+    account_users = Column(postgresql.ARRAY(Integer))
+
+    def dump(self):
+        return dict([(key, val) for key, val in self.__dict__.items() if key[0] != '_'])
+
 # class Transaction(Base):
 #     pass
 
