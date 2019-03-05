@@ -6,7 +6,7 @@ class DatabaseConnectionManager():
     """
 
     def __init__(self):
-        db_session = None
+        self.db_session = None
 
     def connect_to_db(self):
         self.db_session = orm.init_db("postgresql://matthewhickey@localhost/uomi_db")

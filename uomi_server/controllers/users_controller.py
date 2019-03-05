@@ -2,7 +2,12 @@ import connexion
 import six
 
 from uomi_server import util
+from uomi_server.database_util.connection_manager import DatabaseConnectionManager
+from uomi_server.database_util import orm
+from uomi_server.database_util.orm import User
+from flask import jsonify
 
+db_conn_mgmt = DatabaseConnectionManager()
 
 def create_user(body):  # noqa: E501
     """adds a new user
@@ -51,7 +56,11 @@ def query_all_users():  # noqa: E501
 
     :rtype: None
     """
-    return 'do some magic!'
+    # set instance of database management
+    db_conn_mgmt.connect_to_db()
+    q = db_conn_mgmt.db_session.query(orm.User)
+    db_conn_mgmt.disconnect_db()
+    return jsonify([u.dump() for u in q])
 
 
 def user_net_balance(user_id):  # noqa: E501
