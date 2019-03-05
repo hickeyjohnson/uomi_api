@@ -58,7 +58,7 @@ def query_all_users():  # noqa: E501
     """
     # set instance of database management
     db_conn_mgmt.connect_to_db()
-    q = db_conn_mgmt.db_session.query(orm.User)
+    q = db_conn_mgmt.db_session.query(User)
     db_conn_mgmt.disconnect_db()
     return jsonify([u.dump() for u in q])
 
@@ -74,7 +74,7 @@ def user_net_balance(user_id):  # noqa: E501
     :rtype: None
     """
     db_conn_mgmt.connect_to_db()
-    q = db_conn_mgmt.db_session.query(orm.User.net_balance).filter(orm.User.user_id == user_id).one()
+    q = db_conn_mgmt.db_session.query(User.net_balance).filter(User.user_id == user_id).one()
     db_conn_mgmt.disconnect_db()
     print(q)
     return jsonify({"netBalance": q[0]})
