@@ -49,9 +49,7 @@ def user_all_accounts(user_id):  # noqa: E501
     """
 
     # Custom filter for getting all accounts where user is a part of
-    filter_user = text(
-        ":x = ANY(account_users::int[])"
-    )
+    filter_user = text(":x = ANY(account_users::int[])")
     db_conn_mgmt.connect_to_db()
     # Query on accounts using custom filter where the param is user_id
     q = db_conn_mgmt.db_session.query(Account).filter(filter_user).params(x=user_id).all()
