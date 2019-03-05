@@ -50,6 +50,7 @@ def user_all_accounts(user_id):  # noqa: E501
     custom_q = text(
         "SELECT account_id, account_users, last_updated FROM accounts WHERE :x = ANY(account_users::int[])"
     )
+    # FIXME: make it map to Account ORM automatically!
     params = {'x': user_id}
     db_conn_mgmt.connect_to_db()
     q = db_conn_mgmt.db_session.execute(clause=custom_q, mapper=Account(), params=params).fetchall()
@@ -59,5 +60,4 @@ def user_all_accounts(user_id):  # noqa: E501
         result.append({'account_id': row[0],
                     'account_users' : row[1],
                     'last_updated': row[2]})
-    print(result)
     return jsonify(result)
