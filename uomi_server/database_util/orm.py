@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, DateTime, String, Sequence, Integer  # noqa
+from sqlalchemy import create_engine, Column, Numeric, DateTime, String, Sequence, Integer  # noqa
 from sqlalchemy.dialects.postgresql import MONEY
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
@@ -17,7 +17,7 @@ class User(Base):
     first_name = Column(String())
     last_name = Column(String())
     fb_token = Column(String())
-    net_balance = Column(MONEY())
+    net_balance = Column(Numeric())
     created_time = Column(DateTime())
 
     def dump(self):
