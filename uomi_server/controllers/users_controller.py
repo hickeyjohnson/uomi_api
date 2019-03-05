@@ -73,4 +73,8 @@ def user_net_balance(user_id):  # noqa: E501
 
     :rtype: None
     """
-    return 'do some magic!'
+    db_conn_mgmt.connect_to_db()
+    q = db_conn_mgmt.db_session.query(orm.User.net_balance).filter(orm.User.user_id == user_id).one()
+    db_conn_mgmt.disconnect_db()
+    print(q)
+    return jsonify({"netBalance": q[0]})
