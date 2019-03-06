@@ -4,6 +4,7 @@ import six
 from uomi_server import util
 from uomi_server.database_util.connection_manager import DatabaseConnectionManager
 from uomi_server.database_util import orm
+from uomi_server.database_util.helper_queries import get_user_account_balance
 from uomi_server.database_util.orm import User
 from flask import jsonify
 
@@ -76,5 +77,4 @@ def user_net_balance(user_id):  # noqa: E501
     db_conn_mgmt.connect_to_db()
     q = db_conn_mgmt.db_session.query(User.net_balance).filter(User.user_id == user_id).one()
     db_conn_mgmt.disconnect_db()
-    print(q)
     return jsonify({"netBalance": q[0]})
