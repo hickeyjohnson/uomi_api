@@ -17,7 +17,10 @@ def get_user_id(email):
     db_conn_mgmt.connect_to_db()
     q = db_conn_mgmt.db_session.query(User).filter_by(email=email).one_or_none()
     db_conn_mgmt.disconnect_db()
-    return q.user_id
+    if q is not None:
+        return q.user_id
+    else:
+        return -1
 
 def get_user_account_balance(user_id, account_id):
     """
