@@ -23,6 +23,12 @@ def add_transaction(account_id, body):  # noqa: E501
 
     :rtype: None
     """
+
+    # TODO: Gather necessary parameters to make the addition
+
+    # TODO: Set Account.last_updated for the account where transaction being added
+
+    # TODO: After making the addition, return the updated parameters list
     return 'do some magic!'
 
 
