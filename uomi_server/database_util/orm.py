@@ -32,5 +32,14 @@ class Account(Base):
     def dump(self):
         return dict([(key, val) for key, val in self.__dict__.items() if key[0] != '_'])
 
-# class Transaction(Base):
-#     pass
+class Transaction(Base):
+    __tablename__ = "transactions"
+    transaction_id = Column(Integer(), Sequence('transactions_id_seq'), primary_key=True)
+    account_id = Column(Integer())
+    trans_label = Column(String())
+    amount = Column(Numeric())
+    user_owed = Column(Integer())
+    transaction_timestamp = Column(DateTime())
+
+    def dump(self):
+        return dict([(key, val) for key, val in self.__dict__.items() if key[0] != '_'])
