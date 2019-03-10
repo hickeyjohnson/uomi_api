@@ -34,12 +34,3 @@ class Account(Base):
 
 # class Transaction(Base):
 #     pass
-
-
-def init_db(uri):
-    engine = create_engine(uri, convert_unicode=True)
-    db_session = scoped_session(sessionmaker(autocommit=False, autoflush=False,
-                                             bind=engine))
-    Base.query = db_session.query_property()
-    Base.metadata.create_all(bind=engine)
-    return db_session
