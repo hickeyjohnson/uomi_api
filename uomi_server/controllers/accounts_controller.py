@@ -32,7 +32,7 @@ def open_new_account(body):  # noqa: E501
                 return jsonify({"error": "specified user doesn't exist"}), 404
             account_users.append(user_id)
     except KeyError as kerr:
-        return jsonify({"error": "did not receive correct params"}), 404
+        return jsonify({"error": "did not receive correct params"}), 400
 
     new_account = Account(account_users=account_users, last_updated=datetime.utcnow())
     db_session.add(new_account)
