@@ -58,6 +58,7 @@ def find_all_transactions(account_id, user_id):  # noqa: E501
     # find number of users in the account
     account_size = get_account_size(account_id)
     # Iterate through transactions list, dividing non-user transactions by account_size-1
+    # also make them negative, because they OWE someone else money
     for transaction in transactions_list:
         if transaction['user_owed'] != user_id:
             transaction['amount'] = -transaction['amount'] / (account_size - 1)
