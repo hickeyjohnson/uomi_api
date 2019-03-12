@@ -30,3 +30,11 @@ def get_account_size(account_id):
     q = db_session.query(Account).filter(Account.account_id == account_id).one()
 
     return len(q.account_users)
+
+def set_account_last_updated(account_id, timestamp):
+
+    q = db_session.query(Account).filter(Account.account_id == account_id).one()
+
+    q.last_updated = now
+
+    db_session.commit()

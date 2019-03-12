@@ -5,7 +5,7 @@ from uomi_server import util
 from uomi_server import util
 from uomi_server.database_util import orm
 from uomi_server.database_util.orm import Transaction
-from uomi_server.database_util.helper_queries import get_user_id, get_user_account_balance, get_account_size
+from uomi_server.database_util.helper_queries import get_user_id, get_user_account_balance, get_account_size, set_account_last_updated
 from sqlalchemy.sql import text
 from flask import jsonify
 from datetime import datetime
@@ -23,13 +23,18 @@ def add_transaction(account_id, body):  # noqa: E501
 
     :rtype: None
     """
+    now = datetime.utcnow()
+    new_transaction = Transaction(account_id=account_id, trans_label=body['trans_title'],
+                                  amount=body['trans_value'], user_owed=body['user_id'],
+                                  transaction_timestamp=now)
 
-    # TODO: Gather necessary parameters to make the addition
-
+    db_session.add(new_transaction)
+    db_session.commit()
     # TODO: Set Account.last_updated for the account where transaction being added
+    set_account_last_updated(account_id, now)
 
     # TODO: After making the addition, return the updated parameters list
-    return 'do some magic!'
+    return jsonify({"message": "successfully added transaction"}), 201
 
 
 def delete_transaction(transaction_id):  # noqa: E501
