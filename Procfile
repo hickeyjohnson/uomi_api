@@ -1,1 +1,1 @@
-web: gunicorn uomi_server:app
+web: gunicorn uomi_server/__main__:app
