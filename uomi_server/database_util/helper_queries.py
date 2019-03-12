@@ -24,3 +24,9 @@ def get_user_account_balance(user_id, account_id):
     q = db_session.query(func.public.calc_account_balance(user_id, account_id)).one()
     acc_bal = q[0]
     return acc_bal
+
+def get_account_size(account_id):
+
+    q = db_session.query(Account).filter(Account.account_id == account_id).one()
+
+    return len(q.account_users)
