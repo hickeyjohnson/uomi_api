@@ -1,4 +1,4 @@
-from uomi_server.__main__ import main
+# from uomi_server.__main__ import main
 
 import connexion
 import logging
