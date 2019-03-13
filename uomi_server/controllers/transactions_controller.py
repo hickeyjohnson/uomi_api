@@ -52,6 +52,8 @@ def delete_transaction(transaction_id):  # noqa: E501
 
     db_session.delete(trans_to_delete)
 
+    db_session.commit()
+
     if db_session.query(Transaction).filter(Transaction.transaction_id == transaction_id).count():
         return jsonify({"message" : "delete did not work"}), 500
 
