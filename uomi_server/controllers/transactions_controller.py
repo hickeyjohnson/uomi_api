@@ -48,17 +48,23 @@ def delete_transaction(transaction_id):  # noqa: E501
     :rtype: None
     """
 
-    trans_to_delete = db_session.query(Transaction).filter(Transaction.transaction_id == transaction_id).one()
+    trans_to_delete = db_session.query(Transaction).filter(Transaction.transaction_id == transaction_id).one_or_none()
 
-    db_session.delete(trans_to_delete)
+    # Make sure the item to delete exists
+    if trans_to_delete is not None:
+        # If item exists, delete it
+        db_session.delete(trans_to_delete)
+        db_session.commit()
+    else:
+        # If item doesn't exist, indicate so and return 404
+        return jsonify({"message": "item does not exist"}), 404
 
-    db_session.commit()
-
+    # Verify that the delete occurred
     if db_session.query(Transaction).filter(Transaction.transaction_id == transaction_id).count():
         return jsonify({"message" : "delete did not work"}), 500
 
 
-    return jsonify({"message": "transaction {} successfully deleted".format(transaction_id)}), 200
+    return jsonify({}), 204
 
 
 def find_all_transactions(account_id, user_id):  # noqa: E501

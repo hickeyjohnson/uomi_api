@@ -268,7 +268,7 @@ paths:
         type: "integer"
         format: "int32"
       responses:
-        202:
+        204:
           description: "successful deletion"
         404:
           description: "transaction not found"
