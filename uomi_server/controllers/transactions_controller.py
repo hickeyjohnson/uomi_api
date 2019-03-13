@@ -64,7 +64,7 @@ def delete_transaction(transaction_id):  # noqa: E501
         return jsonify({"message" : "delete did not work"}), 500
 
 
-    return jsonify({'message': "success"}), 204
+    return jsonify({'message': "success"}), 200
 
 
 def find_all_transactions(account_id, user_id):  # noqa: E501
