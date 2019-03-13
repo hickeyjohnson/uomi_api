@@ -11,7 +11,7 @@ from flask import jsonify
 from datetime import datetime
 from uomi_server.database_util import db_session
 
-def add_transaction(account_id, body):  # noqa: E501
+def add_transaction(account_id, body, user_id):  # noqa: E501
     """add transaction to an account
 
      # noqa: E501
@@ -25,7 +25,7 @@ def add_transaction(account_id, body):  # noqa: E501
     """
     now = datetime.utcnow()
     new_transaction = Transaction(account_id=account_id, trans_label=body['trans_title'],
-                                  amount=body['trans_value'], user_owed=body['user_id'],
+                                  amount=body['trans_value'], user_owed=user_id,
                                   transaction_timestamp=now)
 
     db_session.add(new_transaction)
