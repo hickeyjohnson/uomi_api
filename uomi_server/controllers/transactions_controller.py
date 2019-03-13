@@ -48,11 +48,11 @@ def delete_transaction(transaction_id):  # noqa: E501
     :rtype: None
     """
 
-    trans_to_delete = db_session.query(Transaction).filter_by(Transaction.transaction_id == transaction_id).one()
+    trans_to_delete = db_session.query(Transaction).filter(Transaction.transaction_id == transaction_id).one()
 
     db_session.delete(trans_to_delete)
 
-    if db_session.query(Transaction).filter_by(Transaction.transaction_id == transaction_id).count():
+    if db_session.query(Transaction).filter(Transaction.transaction_id == transaction_id).count():
         return jsonify({"message" : "delete did not work"}), 500
 
 
