@@ -47,7 +47,16 @@ def delete_transaction(transaction_id):  # noqa: E501
 
     :rtype: None
     """
-    return 'do some magic!'
+
+    trans_to_delete = db_session.query(Transaction).filter_by(Transaction.transaction_id == transaction_id).one()
+
+    db_session.delete(trans_to_delete)
+
+    if db_session.query(Transaction).filter_by(Transaction.transaction_id == transaction_id).count():
+        return jsonify({"message" : "delete did not work"}), 500
+
+
+    return jsonify({"message": "transaction {} successfully deleted".format(transaction_id)}), 200
 
 
 def find_all_transactions(account_id, user_id):  # noqa: E501
