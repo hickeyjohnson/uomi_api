@@ -35,6 +35,6 @@ def set_account_last_updated(account_id, timestamp):
 
     q = db_session.query(Account).filter(Account.account_id == account_id).one()
 
-    q.last_updated = now
+    q.last_updated = timestamp
 
     db_session.commit()
