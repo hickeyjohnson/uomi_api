@@ -36,7 +36,7 @@ def open_new_account(body):  # noqa: E501
     new_account = Account(account_users=account_users, last_updated=datetime.utcnow())
     db_session.add(new_account)
     db_session.commit()
-    return user_all_accounts(body["current_user_id"])
+    return jsonify({"message": "account created"}), 201
 
 
 def remove_account(account_id):  # noqa: E501
