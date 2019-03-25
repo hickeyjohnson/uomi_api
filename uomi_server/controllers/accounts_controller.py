@@ -4,7 +4,7 @@ import six
 from uomi_server import util
 from uomi_server.database_util import orm
 from uomi_server.database_util.orm import Account
-from uomi_server.database_util.helper_queries import get_user_id, get_user_account_balance
+from uomi_server.database_util.helper_queries import get_user_id, get_user_account_balance, get_user_first_last_name
 from sqlalchemy.sql import text
 from flask import jsonify
 from datetime import datetime
@@ -23,14 +23,13 @@ def open_new_account(body):  # noqa: E501
     # May not work, but maybe
     # Expect the input command to have appropiate keys, if not return a 404
     try:
-        # TODO: search database for user_ids that match whoever the user wants in account
         account_users = []
         account_users.append(body["current_user_id"])
         for email in body["user_emails"]:
             user_id = get_user_id(email)
             if user_id is None:
                 return jsonify({"error": "specified user doesn't exist"}), 404
-            account_users.append(user_id)
+        account_users.append(user_id)
     except KeyError as kerr:
         return jsonify({"error": "did not receive correct params"}), 400
 
@@ -50,6 +49,8 @@ def remove_account(account_id):  # noqa: E501
 
     :rtype: None
     """
+    # This API call must first delete all transactions associated with an account
+    # and then delete the account itself.
     return 'do some magic!'
 
 
@@ -72,5 +73,11 @@ def user_all_accounts(user_id):  # noqa: E501
     # Get the balance for each account
     for account in accounts_list:
         account['acc_balance'] = get_user_account_balance(user_id, account['account_id'])
+        account['real_names'] = []
+        for uid in account['account_users']:
+            if uid == user_id:
+                continue
+            # Get the first name, last initial for the other users in the account
+            account['real_names'].append(get_user_first_last_name(uid))
 
     return jsonify(accounts_list), 200

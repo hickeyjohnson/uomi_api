@@ -38,3 +38,15 @@ def set_account_last_updated(account_id, timestamp):
     q.last_updated = timestamp
 
     db_session.commit()
+
+def get_user_first_last_name(user_id):
+    """
+    Returns the first name and last initial as a string for a given user
+    """
+
+    q = db_session.query(User).filter(User.user_id == user_id).one()
+
+    # First name, last initial
+    first_last_name = q.first_name + " " + q.last_name[0] + "."
+
+    return first_last_name
