@@ -60,7 +60,11 @@ def delete_user(user_id):  # noqa: E501
 
     :rtype: None
     """
-    return 'do some magic!'
+    # Delete the user
+    db_session.query(User).filter(User.user_id == user_id).delete()
+    db_session.commit()
+
+    return jsonify({"message" : "user successfully deleted"}), 200
 
 
 def get_user_info(user_id):  # noqa: E501
