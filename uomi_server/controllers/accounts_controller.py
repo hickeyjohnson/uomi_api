@@ -29,7 +29,7 @@ def open_new_account(body):  # noqa: E501
             user_id = get_user_id(email)
             if user_id is None:
                 return jsonify({"error": "specified user doesn't exist"}), 404
-        account_users.append(user_id)
+            account_users.append(user_id)
     except KeyError as kerr:
         return jsonify({"error": "did not receive correct params"}), 400
 
