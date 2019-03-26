@@ -3,7 +3,7 @@ import six
 
 from uomi_server import util
 from uomi_server.database_util import orm
-from uomi_server.database_util.orm import Account
+from uomi_server.database_util.orm import Account, Transaction
 from uomi_server.database_util.helper_queries import get_user_id, get_user_account_balance, get_user_first_last_name
 from sqlalchemy.sql import text
 from flask import jsonify
@@ -49,9 +49,15 @@ def remove_account(account_id):  # noqa: E501
 
     :rtype: None
     """
-    # This API call must first delete all transactions associated with an account
-    # and then delete the account itself.
-    return 'do some magic!'
+
+    # First delete all transactions associated with the account
+    db_session.query(Transaction).filter(Transaction.account_id == account_id).delete()
+    # Once the account is empty, remove it
+    acc_q = db_session.query(Account).filter(Account.account_id == account_id).delete()
+    # Commit the changes
+    db_session.commit()
+
+    return jsonify({"message": "account emptied and deleted"}), 200
 
 
 def user_all_accounts(user_id):  # noqa: E501
