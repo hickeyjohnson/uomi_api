@@ -44,9 +44,28 @@ def get_user_first_last_name(user_id):
     Returns the first name and last initial as a string for a given user
     """
 
-    q = db_session.query(User).filter(User.user_id == user_id).one()
+    try:
+        q = db_session.query(User).filter(User.user_id == user_id).one()
+        # First name, last initial
+        first_last_name = q.first_name + " " + q.last_name[0] + "."
+    except:
+        first_last_name = "unknown"
 
-    # First name, last initial
-    first_last_name = q.first_name + " " + q.last_name[0] + "."
 
     return first_last_name
+
+def get_all_account_users_names(account_id, user_id):
+    """
+    Returns a list of users who are in the account (not the current user)
+    """
+
+    q = db_session.query(Account).filter(Account.account_id == account_id).one()
+
+    account = q.dump()
+    account['account_user_names'] = []
+
+    for user in account['account_users']:
+        if user != user_id:
+            account['account_user_names'].append(get_user_first_last_name(user))
+
+    return account['account_user_names']
