@@ -5,7 +5,7 @@ from uomi_server import util
 from uomi_server import util
 from uomi_server.database_util import orm
 from uomi_server.database_util.orm import Transaction
-from uomi_server.database_util.helper_queries import get_user_id, get_user_account_balance, get_account_size, set_account_last_updated
+from uomi_server.database_util.helper_queries import get_user_id, get_user_account_balance, get_account_size, set_account_last_updated, get_all_account_users_names, get_user_first_last_name
 from sqlalchemy.sql import text
 from flask import jsonify
 from datetime import datetime
@@ -90,8 +90,12 @@ def find_all_transactions(account_id, user_id):  # noqa: E501
     for transaction in transactions_list:
         if transaction['user_owed'] != user_id:
             transaction['amount'] = -transaction['amount'] / (account_size - 1)
+            transaction['user_owed_name'] = get_user_first_last_name(transaction['user_owed'])
+        else:
+            transaction['user_owed_name'] = "You"
     return_object = {"account_balance": get_user_account_balance(user_id, account_id),
-                     "transactions_list" : transactions_list}
+                     "transactions_list" : transactions_list,
+                     "account_members": get_all_account_users_names(account_id, user_id)}
 
 
 
