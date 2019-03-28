@@ -77,7 +77,7 @@ def get_user_info(user_id):  # noqa: E501
 
     :rtype: object
     """
-    return 'do some magic!'
+    return 'not implemented'
 
 
 def query_all_users():  # noqa: E501
