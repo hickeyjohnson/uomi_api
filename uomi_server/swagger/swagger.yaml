@@ -52,6 +52,11 @@ paths:
         required: true
         schema:
           type: "object"
+          example: {
+            email: testing@mun.ca,
+            first_name: First,
+            last_name: Last
+          }
       responses:
         201:
           description: "user created"
@@ -148,6 +153,10 @@ paths:
         required: true
         schema:
           type: "object"
+          example: {
+            current_user_id: 2,
+            user_emails: [spezzafan@hotmail.com]
+          }
       responses:
         201:
           description: "successful account creation"
@@ -247,6 +256,10 @@ paths:
         required: true
         schema:
           type: "object"
+          example: {
+            trans_value: 5.50,
+            trans_title: "pizza"
+          }
       responses:
         201:
           description: "successful creation"
